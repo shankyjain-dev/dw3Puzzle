@@ -52,4 +52,6 @@
   <button (click)="fetchQuote()" mat-raised-button>{{formLabels.buttonText}}</button>
 </form>
 
-<coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>
+<mat-error *ngIf="error"> {{ error }} </mat-error>
+
+<coding-challenge-chart *ngIf="quotes$ && !error" [data$]="quotes$"></coding-challenge-chart>
