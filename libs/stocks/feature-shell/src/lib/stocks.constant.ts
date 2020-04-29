@@ -9,12 +9,4 @@ export class StocksConstant {
       { viewValue: 'Three months', value: '3m' },
       { viewValue: 'One month', value: '1m' }
     ]
-	
-	public static formLabels = {
-      symbolLabel: 'Stock symbol',
-      symbolPlaceHolder: 'Symbol e.g AAPL',
-      symbolError: 'Please enter a symbol',
-      timePeriodLabel: 'Favorite time period',
-      timePeriodError: 'Please select a Time Period'
-    }
 }
