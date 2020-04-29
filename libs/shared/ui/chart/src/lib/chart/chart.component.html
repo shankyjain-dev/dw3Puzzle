@@ -1,5 +1,6 @@
 <google-chart
-  *ngIf="data"
+  *ngIf="data$ | async as chartData"
+  aria-label="Chart"
   [title]="chart.title"
   [type]="chart.type"
   [data]="chartData"
