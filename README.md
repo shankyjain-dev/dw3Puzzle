@@ -44,8 +44,26 @@ Please provide a short code review of the base `master` branch:
 
 #### Task 1-A
 1. What is done well?
+ - using "nrwl" to achieve Monorepo aproach 
+ - Use of FormBuilder, FormGroup, Validators from @angular/forms in stock component.
+ - state management using redux pattern (NgRx)
+ - Usage of google charts, as it has interactive charts to display data and easy to use.
+ - lazy loading
+
 2. What would you change?
+ - Instead of any we can use appropriate data types.
+ - We can add access specifiers for functions and variables.
+ - We can use constants instead of hard coded data or we can use mock data wherever required.
+ - Unit test cases should run without fail and should cover all functions/statements.
+ - "Favorite time period" is a mandatory field, hence added required validation with appropriate     error message.
+ - We can disable "Go" button if form fields are not valid.
+ - use of "async" pipe instead of leaky subscibe function.
+
 3. Are there any code smells or problematic implementations?
+ - No validation on "Favorite time period" listbox.
+ - Chart is not rendering on the page, so used async pipe of ngrx.
+ - Test cases are failing.
+ - "imports" and "variable" declarations are not used in code.
 
 > Make a PR to fix at least one of the issues that you identify
 
