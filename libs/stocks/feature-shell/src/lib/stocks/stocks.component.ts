@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PriceQueryFacade } from '@coding-challenge/stocks/data-access-price-query';
+import { Subscription } from 'rxjs';
+import { StocksConstant } from '../stocks.constant';
 
 @Component({
   selector: 'coding-challenge-stocks',
@@ -11,33 +13,41 @@ export class StocksComponent implements OnInit {
   stockPickerForm: FormGroup;
   symbol: string;
   period: string;
+  maxDate: Date;
+  startDate: Date;
+  endDate: Date;
+  subscription: Subscription;
 
   quotes$ = this.priceQuery.priceQueries$;
 
-  timePeriods = [
-    { viewValue: 'All available data', value: 'max' },
-    { viewValue: 'Five years', value: '5y' },
-    { viewValue: 'Two years', value: '2y' },
-    { viewValue: 'One year', value: '1y' },
-    { viewValue: 'Year-to-date', value: 'ytd' },
-    { viewValue: 'Six months', value: '6m' },
-    { viewValue: 'Three months', value: '3m' },
-    { viewValue: 'One month', value: '1m' }
-  ];
+  formLabels = StocksConstant.formLabels;
 
-  constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {
-    this.stockPickerForm = fb.group({
+  constructor(private fb: FormBuilder, private priceQuery: PriceQueryFacade) {}
+    
+  ngOnInit() {
+    this.maxDate = new Date();
+    this.stockPickerForm = this.fb.group({
       symbol: [null, Validators.required],
-      period: [null, Validators.required]
+      startDate: [null, Validators.required],
+      endDate: [null, Validators.required]
     });
+    //if date range is invalid startDate will be same as endDate.
+    this.subscription = this.stockPickerForm.valueChanges.subscribe(value => {
+      const { startDate, endDate } = value;
+      if (endDate != null && endDate < startDate){    
+        this.stockPickerForm.patchValue({startDate : new Date(endDate)});
+      }
+    })
   }
 
-  ngOnInit() {}
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   fetchQuote() {
     if (this.stockPickerForm.valid) {
-      const { symbol, period } = this.stockPickerForm.value;
-      this.priceQuery.fetchQuote(symbol, period);
+      const { symbol, startDate, endDate } = this.stockPickerForm.value;
+      this.priceQuery.fetchQuote(symbol, "max", new Date(startDate), new Date(endDate) );
     }
   }
 }
