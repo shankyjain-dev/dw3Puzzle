@@ -2,7 +2,7 @@
   <mat-form-field>
     <input
       matInput
-      placeholder="Symbol e.g AAPL"
+      placeholder="{{formLabels.symbolPlaceHolder}}"
       formControlName="symbol"
       value=""
     />
@@ -12,24 +12,46 @@
           !stockPickerForm.get('symbol').valid &&
           stockPickerForm.get('symbol').touched
         "
-        >Please enter a symbol</span
+        >{{formLabels.symbolError}}</span
       >
     </mat-error>
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>Favorite time period</mat-label>
-    <mat-select formControlName="period">
-      <mat-option
-        *ngFor="let timePeriod of timePeriods"
-        [value]="timePeriod.value"
-      >
-        {{ timePeriod.viewValue }}
-      </mat-option>
-    </mat-select>
+    <mat-label>{{formLabels.timePeriodStartDateLabel}}</mat-label>
+    <input matInput [matDatepicker]="startDate" [max]="maxDate" (click)="startDate.open()" formControlName="startDate">
+    <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+    <mat-datepicker #startDate></mat-datepicker>
+    <mat-error>
+      <span
+      *ngIf="
+        !stockPickerForm.get('startDate').valid &&
+        stockPickerForm.get('startDate').touched
+      "
+      >{{formLabels.startDateError}}</span
+    >
+  </mat-error>
   </mat-form-field>
 
-  <button (click)="fetchQuote()" mat-raised-button>Go</button>
+  <mat-form-field>
+    <mat-label>{{formLabels.timePeriodEndDateLabel}}</mat-label>
+    <input matInput [matDatepicker]="endDate" [max]="maxDate" (click)="endDate.open()" formControlName="endDate">
+    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+    <mat-datepicker #endDate></mat-datepicker>
+    <mat-error
+    ><span
+    *ngIf="
+        !stockPickerForm.get('endDate').valid &&
+        stockPickerForm.get('endDate').touched
+      "
+      >{{formLabels.endDateError}}</span
+    ></mat-error
+      >
+  </mat-form-field>
+
+  <button (click)="fetchQuote()" mat-raised-button>{{formLabels.buttonText}}</button>
 </form>
 
-<coding-challenge-chart [data$]="quotes$"></coding-challenge-chart>
+<mat-error *ngIf="error"> {{ error }} </mat-error>
+
+<coding-challenge-chart *ngIf="quotes$ && !error" [data$]="quotes$"></coding-challenge-chart>
